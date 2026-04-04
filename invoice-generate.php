@@ -367,7 +367,7 @@
       display: block; margin-bottom: 10px;
     }
     .notes-area {
-      width: 100%; min-height: 90px;
+      width: 100%; min-height: 130px;
       font-size: 12px; font-family: inherit; color: var(--muted);
       border: 1px solid var(--border); border-radius: var(--radius);
       padding: 12px 14px; resize: vertical; background: var(--bg); line-height: 1.7;
@@ -614,7 +614,7 @@
         <div class="doc-header">
           <div class="doc-left">
             <div class="doc-type-label" id="docTitle" contenteditable="true">INVOICE</div>
-            <div class="doc-num" contenteditable="true">#INV-2026-001</div>
+            <div class="doc-num" contenteditable="true">#INV-0426-001</div>
           </div>
           <div class="doc-right">
             <div class="logo-wrap-doc">
@@ -623,7 +623,6 @@
             </div>
             <div class="co-block" id="coBlock">
               <div class="co-name" contenteditable="true">YM SUCCESS</div>
-              <div class="co-sub" contenteditable="true">Your company tagline</div>
               <div class="co-sub" contenteditable="true">info@ymsuccess.com</div>
               <div class="co-sub" contenteditable="true">+60 12-345 6789</div>
             </div>
@@ -637,7 +636,6 @@
           <div class="meta-block">
             <span class="meta-lbl">Bill To</span>
             <div class="meta-val strong" contenteditable="true">Client Name / Company</div>
-            <div class="meta-val" contenteditable="true">Company Sdn Bhd</div>
             <div class="meta-val" contenteditable="true">Address Line 1</div>
             <div class="meta-val" contenteditable="true">City, Postcode</div>
             <div class="meta-val" contenteditable="true">Malaysia</div>
