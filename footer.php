@@ -31,9 +31,8 @@
         <h5>CONTACT</h5>
         <ul>
           <li><a href="mailto:info@ymsuccess.com">info@ymsuccess.com</a></li>
-          <li><a href="#">+60 17-477 6935</a></li>
-          <li><a href="#">Kuala Lumpur, Malaysia</a></li>
-          <li><a href="#">Mon–Fri, 10AM–9PM</a></li>
+          <li><a href="https://wa.me/60174776935" target="_blank" rel="noopener noreferrer">+60 17-477 6935</a></li>
+          <li><a href="">Taman Pandan Mewah, <br> Ampang, Selangor</a></li>
         </ul>
       </div>
     </div>
