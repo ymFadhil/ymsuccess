@@ -123,7 +123,7 @@
             <div class="pkg-note">One-time payment · Delivered in 14 days</div>
           </div>
           <ul class="pkg-list">
-            <li><span class="chk y">✓</span>Up to 5 pages</li>
+            <li><span class="chk y">✓</span>Landing Page</li>
             <li><span class="chk y">✓</span>Mobile responsive design</li>
             <li><span class="chk y">✓</span>Contact form integration</li>
             <li><span class="chk y">✓</span>Basic on-page SEO</li>
