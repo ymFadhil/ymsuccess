@@ -2,7 +2,7 @@
     <div class="ft-top">
       <div class="ft-brand">
         <span class="logo logo--img">
-          <img src="assets/backgroud_picture/logo-ym.png" alt="" width="160" height="64" decoding="async"/>
+          <img src="assets/backgroud_picture/logo-ym.png" alt="" width="160" height="64" decoding="async" loading="lazy"/>
           <div class="logo-txt">YM<span>SUCCESS</span></div>
         </span>
         <p>A focused web | system development based in Malaysia. We build and redesign websites that look great and perform even better.</p>

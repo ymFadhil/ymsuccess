@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>YMSUCCESS — Web | System Development</title>
   <link rel="icon" href="assets/favicon_io/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
 
@@ -16,10 +18,15 @@
   <!-- NAV -->
   <nav>
     <a href="#" class="logo logo--img" aria-label="YMSUCCESS — home">
-      <img src="assets/backgroud_picture/logo-ym.png" alt="" width="160" height="64" decoding="async"/>
+      <img src="assets/backgroud_picture/logo-ym.png" alt="" width="160" height="64" decoding="async" fetchpriority="high"/>
       <div class="logo-txt">YM<span>SUCCESS</span></div>
     </a>
-    <ul>
+    <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Open menu">
+      <span class="nav-toggle__bar" aria-hidden="true"></span>
+      <span class="nav-toggle__bar" aria-hidden="true"></span>
+      <span class="nav-toggle__bar" aria-hidden="true"></span>
+    </button>
+    <ul id="mainNav" class="nav-links">
       <li><a href="#packages">Packages</a></li>
       <li><a href="#process">Process</a></li>
       <li><a href="#services">Services</a></li>
@@ -27,6 +34,7 @@
       <li><a href="#cta" class="nav-cta">Get Started</a></li>
     </ul>
   </nav>
+  <div class="nav-backdrop" aria-hidden="true"></div>
 
   <!-- HERO -->
   <div class="hero">
@@ -431,6 +439,6 @@
 
   <!-- FOOTER -->
   <?php include __DIR__ . '/footer.php'; ?>
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

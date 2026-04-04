@@ -1,20 +1,37 @@
-// Custom cursor
-const cursor = document.getElementById('cursor');
-const ring   = document.getElementById('cursorRing');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx+'px'; cursor.style.top = my+'px';
-});
-(function animRing(){
-  rx += (mx-rx)*0.12; ry += (my-ry)*0.12;
-  ring.style.left = rx+'px'; ring.style.top = ry+'px';
-  requestAnimationFrame(animRing);
+// Custom cursor (desktop only — skips touch / coarse pointer to save CPU on mobile)
+(function () {
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  const useCustomCursor =
+    cursor &&
+    ring &&
+    window.matchMedia('(pointer: fine)').matches &&
+    window.matchMedia('(hover: hover)').matches;
+
+  if (useCustomCursor) {
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', (e) => {
+      mx = e.clientX;
+      my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+    });
+    (function animRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animRing);
+    })();
+    document.querySelectorAll('a,button').forEach((el) => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+    });
+  } else if (cursor && ring) {
+    cursor.remove();
+    ring.remove();
+  }
 })();
-document.querySelectorAll('a,button').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
-});
 
 // Scroll reveal
 const io = new IntersectionObserver(entries=>{
@@ -41,6 +58,49 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     if(t){ e.preventDefault(); window.scrollTo({top:t.offsetTop-80,behavior:'smooth'}); }
   });
 });
+
+// Mobile nav (hamburger)
+(function () {
+  const nav = document.querySelector('nav');
+  const toggle = document.getElementById('navToggle');
+  const menu = document.getElementById('mainNav');
+  const backdrop = document.querySelector('.nav-backdrop');
+  if (!nav || !toggle || !menu) return;
+
+  const mq = window.matchMedia('(max-width: 1024px)');
+
+  function setOpen(open) {
+    nav.classList.toggle('is-open', open);
+    document.body.classList.toggle('nav-menu-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    if (backdrop) backdrop.setAttribute('aria-hidden', open ? 'false' : 'true');
+  }
+
+  function closeNav() {
+    setOpen(false);
+  }
+
+  toggle.addEventListener('click', () => {
+    setOpen(!nav.classList.contains('is-open'));
+  });
+
+  if (backdrop) backdrop.addEventListener('click', closeNav);
+
+  menu.querySelectorAll('a').forEach((a) => {
+    a.addEventListener('click', () => {
+      if (mq.matches) closeNav();
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.classList.contains('is-open')) closeNav();
+  });
+
+  window.addEventListener('resize', () => {
+    if (!mq.matches) closeNav();
+  });
+})();
 
 // Contact modal → send_email.php
 (function () {
