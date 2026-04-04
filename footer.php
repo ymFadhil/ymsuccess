@@ -1,4 +1,4 @@
-<footer>
+<footer class="footer">
     <div class="ft-top">
       <div class="ft-brand">
         <span class="logo logo--img">
@@ -24,6 +24,7 @@
           <li><a href="#services">UI/UX Design</a></li>
           <li><a href="#services">SEO</a></li>
           <li><a href="#services">Maintenance</a></li>
+          <li><a href="invoice-generate">Invoice Generator</a></li>
         </ul>
       </div>
       <div class="ft-col">
