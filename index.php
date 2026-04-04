@@ -128,10 +128,10 @@
             <li><span class="chk y">✓</span>Contact form integration</li>
             <li><span class="chk y">✓</span>Basic on-page SEO</li>
             <li><span class="chk y">✓</span>Google Maps embed</li>
-            <li><span class="chk y">✓</span>1 month free support</li>
+            <li><span class="chk y">✓</span>2 weeks free support</li>
             <li><span class="chk n">—</span>Custom animations</li>
             <li><span class="chk n">—</span>E-commerce / payment</li>
-            <li><span class="chk n">—</span>CMS / blog system</li>
+            <li><span class="chk n">—</span>Blog Post</li>
           </ul>
           <a href="#cta" class="pkg-btn">Choose Starter</a>
         </div>
@@ -149,10 +149,10 @@
             <li><span class="chk y">✓</span>Up to 10 pages</li>
             <li><span class="chk y">✓</span>Custom UI/UX design</li>
             <li><span class="chk y">✓</span>Mobile + tablet responsive</li>
-            <li><span class="chk y">✓</span>CMS / blog system</li>
+            <li><span class="chk y">✓</span>Blog Post</li>
             <li><span class="chk y">✓</span>Advanced SEO setup</li>
             <li><span class="chk y">✓</span>Smooth animations</li>
-            <li><span class="chk y">✓</span>3 months free support</li>
+            <li><span class="chk y">✓</span>1 months free support</li>
             <li><span class="chk n">—</span>E-commerce / payment</li>
           </ul><br>
           <a href="#cta" class="pkg-btn">Choose Growth</a>
@@ -164,7 +164,7 @@
           <div class="pkg-price-block">
             <div class="pkg-label">Starting from</div>
             <div class="pkg-amt"><span class="pkg-curr">RM</span><span class="pkg-num">5,999</span></div>
-            <div class="pkg-note">One-time payment · Delivered in 21 days</div>
+            <div class="pkg-note">One-time payment · Delivered in 6 weeks</div>
           </div>
           <ul class="pkg-list">
             <li><span class="chk y">✓</span>Unlimited pages</li>
@@ -173,8 +173,9 @@
             <li><span class="chk y">✓</span>Advanced SEO + sitemap</li>
             <li><span class="chk y">✓</span>Custom animations &amp; effects</li>
             <li><span class="chk y">✓</span>Live chat integration</li>
+            <li><span class="chk y">✓</span>Blog Post</li>
             <li><span class="chk y">✓</span>Analytics dashboard setup</li>
-            <li><span class="chk y">✓</span>6 months free support</li><br>
+            <li><span class="chk y">✓</span>2 months free support</li><br>
           </ul>
           <a href="#cta" class="pkg-btn">Choose Elite</a>
         </div>
@@ -233,7 +234,7 @@
           <div class="pkg-price-block">
             <div class="pkg-label">Starting from</div>
             <div class="pkg-amt"><span class="pkg-curr">RM</span><span class="pkg-num">4,999</span></div>
-            <div class="pkg-note">One-time payment · Delivered in 21 days</div>
+            <div class="pkg-note">One-time payment · Delivered in 6 weeks</div>
           </div>
           <ul class="pkg-list">
             <li><span class="chk y">✓</span>Unlimited pages redesign</li>
