@@ -30,6 +30,7 @@
       <li><a href="#packages">Packages</a></li>
       <li><a href="#process">Process</a></li>
       <li><a href="#services">Services</a></li>
+      <li><a href="blog">Blog</a></li>
       <li><a href="#why">Why Us</a></li>
       <li><a href="#cta" class="nav-cta">Get Started</a></li>
     </ul>

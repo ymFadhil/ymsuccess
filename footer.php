@@ -10,20 +10,20 @@
       <div class="ft-col">
         <h5>PACKAGES</h5>
         <ul>
-          <li><a href="#packages">Starter</a></li>
-          <li><a href="#packages">Growth</a></li>
-          <li><a href="#packages">Elite</a></li>
-          <li><a href="#packages">Redesign Plans</a></li>
+          <li><a href="index.php#packages">Starter</a></li>
+          <li><a href="index.php#packages">Growth</a></li>
+          <li><a href="index.php#packages">Elite</a></li>
+          <li><a href="index.php#packages">Redesign Plans</a></li>
         </ul>
       </div>
       <div class="ft-col">
         <h5>SERVICES</h5>
         <ul>
-          <li><a href="#services">New Website</a></li>
-          <li><a href="#services">Website Redesign</a></li>
-          <li><a href="#services">UI/UX Design</a></li>
-          <li><a href="#services">SEO</a></li>
-          <li><a href="#services">Maintenance</a></li>
+          <li><a href="index.php#services">New Website</a></li>
+          <li><a href="index.php#services">Website Redesign</a></li>
+          <li><a href="index.php#services">UI/UX Design</a></li>
+          <li><a href="index.php#services">SEO</a></li>
+          <li><a href="index.php#services">Maintenance</a></li>
           <li><a href="invoice-generate">Invoice Generator</a></li>
         </ul>
       </div>

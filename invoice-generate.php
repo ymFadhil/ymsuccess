@@ -500,6 +500,7 @@
       <li><a href="index.php#packages">Packages</a></li>
       <li><a href="index.php#process">Process</a></li>
       <li><a href="index.php#services">Services</a></li>
+      <li><a href="blog">Blog</a></li>
       <li><a href="index.php#why">Why Us</a></li>
       <li><a href="index.php#cta" class="nav-cta">Get Started</a></li>
     </ul>
