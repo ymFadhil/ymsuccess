@@ -104,7 +104,11 @@
 
 <script src="script.js"></script>
 <script>
-const API = 'api.php'; // change to full URL if needed: 'https://yourdomain.com/api.php'
+const API = 'api.php'; // change to full URL if needed
+const apiUrl = (r, params = {}) => {
+  const q = new URLSearchParams({ r, ...params });
+  return `${API}?${q.toString()}`;
+};
 let curPage=1,curCat='',curSearch='',totalPages=1;
 document.getElementById('canonical').href=location.href;
 
@@ -115,7 +119,7 @@ async function loadPosts(page=1){
   if(curCat) p.set('category',curCat);
   if(curSearch) p.set('search',curSearch);
   try{
-    const r=await fetch(`${API}/posts?${p}`);
+    const r=await fetch(apiUrl('posts', Object.fromEntries(p.entries())));
     const d=await r.json();
     totalPages=d.pages||1;
     renderPosts(d.posts||[]);
@@ -152,7 +156,7 @@ async function loadPost(slug){
   document.getElementById('post-html').innerHTML='<div class="blog-spinner"></div>';
   window.scrollTo(0,0);
   try{
-    const r=await fetch(`${API}/posts/${slug}`);
+    const r=await fetch(apiUrl('posts', { id: slug }));
     const post=await r.json();
     if(post.error) throw new Error();
     const dt=new Date(post.created_at).toLocaleDateString('en-MY',{day:'numeric',month:'long',year:'numeric'});
@@ -186,7 +190,7 @@ function showList(){
 
 async function loadCategories(){
   try{
-    const r=await fetch(`${API}/categories`);
+    const r=await fetch(apiUrl('categories'));
     const d=await r.json();
     const bar=document.getElementById('cat-bar');
     (d.categories||[]).forEach(cat=>{

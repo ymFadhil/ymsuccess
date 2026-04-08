@@ -229,6 +229,10 @@
 
 <script>
 const API='api.php'; // change to your full URL if needed
+const apiUrl=(r,params={})=>{
+  const q=new URLSearchParams({r,...params});
+  return `${API}?${q.toString()}`;
+};
 let token=localStorage.getItem('ym_admin_token')||'';
 let quill;
 
@@ -244,7 +248,7 @@ async function doLogin(){
   const pw=document.getElementById('pw').value;
   if(!un||!pw) return;
   try{
-    const r=await fetch(`${API}/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:un,password:pw})});
+    const r=await fetch(apiUrl('login'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:un,password:pw})});
     const d=await r.json();
     if(d.token){token=d.token;localStorage.setItem('ym_admin_token',token);showApp();}
     else{document.getElementById('login-err').style.display='block';}
@@ -252,7 +256,7 @@ async function doLogin(){
 }
 
 async function doLogout(){
-  await fetch(`${API}/logout`,{method:'POST',headers:{Authorization:`Bearer ${token}`}});
+  await fetch(apiUrl('logout'),{method:'POST',headers:{Authorization:`Bearer ${token}`}});
   token='';localStorage.removeItem('ym_admin_token');
   document.getElementById('app').style.display='none';
   document.getElementById('login-screen').style.display='flex';
@@ -279,7 +283,7 @@ function showView(v){
 async function loadAdminPosts(){
   document.getElementById('posts-table').innerHTML='<tr><td colspan="5"><div class="spinner"></div></td></tr>';
   try{
-    const r=await fetch(`${API}/admin-posts`,{headers:ah()});
+    const r=await fetch(apiUrl('admin-posts'),{headers:ah()});
     if(r.status===401){doLogout();return;}
     const d=await r.json();
     const posts=d.posts||[];
@@ -329,13 +333,13 @@ async function editPost(id){
   document.getElementById('editor-title').textContent='Edit Post';
   try{
     // get all posts and find this one
-    const r=await fetch(`${API}/admin-posts`,{headers:ah()});
+    const r=await fetch(apiUrl('admin-posts'),{headers:ah()});
     const d=await r.json();
     const posts=d.posts||[];
     const meta=posts.find(p=>p.id===id);
     if(!meta) return;
     // fetch full post by slug
-    const r2=await fetch(`${API}/posts/${meta.slug}`,{headers:ah()});
+    const r2=await fetch(apiUrl('posts',{id:meta.slug}),{headers:ah()});
     const post=await r2.json();
     document.getElementById('edit-id').value=post.id;
     document.getElementById('f-title').value=post.title||'';
@@ -376,9 +380,9 @@ async function savePost(status){
   try{
     let r;
     if(id){
-      r=await fetch(`${API}/posts/${id}`,{method:'PUT',headers:ah(),body:JSON.stringify(body)});
+      r=await fetch(apiUrl('posts',{id}),{method:'PUT',headers:ah(),body:JSON.stringify(body)});
     }else{
-      r=await fetch(`${API}/posts`,{method:'POST',headers:ah(),body:JSON.stringify(body)});
+      r=await fetch(apiUrl('posts'),{method:'POST',headers:ah(),body:JSON.stringify(body)});
     }
     if(r.ok){
       toast(status==='published'?'Post published!':'Draft saved');
@@ -390,7 +394,7 @@ async function savePost(status){
 async function deletePost(id,title){
   if(!confirm(`Delete "${title}"? This cannot be undone.`)) return;
   try{
-    const r=await fetch(`${API}/posts/${id}`,{method:'DELETE',headers:ah()});
+    const r=await fetch(apiUrl('posts',{id}),{method:'DELETE',headers:ah()});
     if(r.ok){toast('Post deleted');loadAdminPosts();}
     else toast('Error deleting post','red');
   }catch{toast('Connection error','red');}

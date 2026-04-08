@@ -5,21 +5,26 @@
 // ============================================================
 
 // ── 1. DATABASE CONFIG ──────────────────────────────────────
-// Database credentials: switch between 'local' and 'production' here.
-// Set $env = 'local' or 'production' as needed.
-$env = 'local'; // Change to 'production' on live server
+$host = strtolower((string)($_SERVER['HTTP_HOST'] ?? ''));
+$isLocalHost = ($host === '' || strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false);
+$env = $isLocalHost ? 'local' : 'production';
+if (isset($_GET['env']) && $_GET['env'] === 'local') {
+    $env = 'local';
+}
+if (isset($_GET['env']) && $_GET['env'] === 'production') {
+    $env = 'production';
+}
 
 if ($env === 'local') {
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'ymsukfxv_blog');
-    define('DB_USER', 'demosystem');         
-    define('DB_PASS', '6WDYmS0t0EahmRBL');             
+    define('DB_USER', 'demosystem');
+    define('DB_PASS', '6WDYmS0t0EahmRBL');
 } else {
-    // TODO: ENTER REAL PRODUCTION DATABASE CREDENTIALS BELOW
-    define('DB_HOST', 'localhost');      // e.g. 'db.yourdomain.com'
-    define('DB_NAME', 'ymsukfxv_blog');    // e.g. 'your_prod_db'
-    define('DB_USER', 'ymsukfxv_fadhil');      // e.g. 'your_prod_user'
-    define('DB_PASS', '8Iu[T5sLU&Z~');      // e.g. 'your_prod_password'
+    define('DB_HOST', 'localhost');
+    define('DB_NAME', 'ymsukfxv_blog');
+    define('DB_USER', 'cpses_ympj7cyy4x');
+    define('DB_PASS', '8Iu[T5sLU&Z~');
 }
 
 // ── 2. CORS & HEADERS ───────────────────────────────────────
@@ -29,6 +34,20 @@ header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(200); exit; }
+
+set_exception_handler(function (Throwable $e): void {
+    if (!headers_sent()) {
+        header('Content-Type: application/json; charset=UTF-8');
+        http_response_code(500);
+    }
+    $debug = (bool)($GLOBALS['API_IS_LOCAL'] ?? false);
+    echo json_encode([
+        'error'   => 'Server error',
+        'message' => $debug ? $e->getMessage() : 'Please check server logs.',
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit;
+});
+$GLOBALS['API_IS_LOCAL'] = $isLocalHost;
 
 // ── 3. DB CONNECTION ────────────────────────────────────────
 function db(): PDO {
@@ -61,12 +80,10 @@ function slugify(string $text): string {
 function get_bearer_token(): string {
     $auth = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
 
-    // Some Apache/PHP setups expose Authorization in REDIRECT_HTTP_AUTHORIZATION.
     if (!$auth && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
         $auth = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
     }
 
-    // Fallback for environments where headers are only available via getallheaders().
     if (!$auth && function_exists('getallheaders')) {
         $headers = getallheaders();
         if (isset($headers['Authorization'])) {
@@ -85,50 +102,50 @@ function get_bearer_token(): string {
 function auth_required(): void {
     $token = get_bearer_token();
     if ($token === '') json_out(['error' => 'Unauthorized'], 401);
-    // We store session tokens in a simple way — check against stored token
     $st = db()->prepare('SELECT user_id FROM admin_sessions WHERE token = ? AND expires_at > NOW()');
     $st->execute([$token]);
     if (!$st->fetch()) json_out(['error' => 'Unauthorized'], 401);
 }
 
 // ── 5. ROUTER ────────────────────────────────────────────────
-$method = $_SERVER['REQUEST_METHOD'];
-$path   = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+$path   = trim(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH), '/');
 $parts  = explode('/', $path);
 
-// Remove script name if present (e.g. api.php/posts → posts)
-$idx = array_search('api.php', $parts);
-if ($idx !== false) $parts = array_slice($parts, $idx + 1);
+$idx = array_search('api.php', $parts, true);
+if ($idx !== false) {
+    $parts = array_slice($parts, $idx + 1);
+}
 $resource = $parts[0] ?? '';
 $id       = $parts[1] ?? null;
+
+if (isset($_GET['r']) && is_string($_GET['r']) && $_GET['r'] !== '') {
+    $resource = $_GET['r'];
+    if (isset($_GET['id']) && $_GET['id'] !== '' && $_GET['id'] !== null) {
+        $id = (string)$_GET['id'];
+    }
+}
 
 // ── 5a. AUTH ────────────────────────────────────────────────
 if ($resource === 'login' && $method === 'POST') {
     $body = json_decode(file_get_contents('php://input'), true);
+    $username = trim((string)($body['username'] ?? ''));
+    $inputPassword = trim((string)($body['password'] ?? ''));
+
     $st = db()->prepare('SELECT id, password_hash FROM admin_users WHERE username = ?');
-    $st->execute([$body['username'] ?? '']);
+    $st->execute([$username]);
     $user = $st->fetch();
-    $inputPassword = (string)($body['password'] ?? '');
+
     $storedHash = (string)($user['password_hash'] ?? '');
-    $isValid = false;
 
-    // Normal path: secure hash verification.
-    if ($user && password_verify($inputPassword, $storedHash)) {
-        $isValid = true;
-    }
-
-    // Backward compatibility: handle old plain-text stored passwords once, then upgrade hash.
-    if (!$isValid && $user && $storedHash !== '' && hash_equals($storedHash, $inputPassword)) {
-        $newHash = password_hash($inputPassword, PASSWORD_DEFAULT);
-        $up = db()->prepare('UPDATE admin_users SET password_hash = ? WHERE id = ?');
-        $up->execute([$newHash, $user['id']]);
-        $isValid = true;
-    }
+    // ✅ FIX: Use password_verify() to properly check bcrypt hashes.
+    // If your DB stores a plain-text password, replace this with:
+    //   $isValid = $user && $storedHash !== '' && hash_equals($storedHash, $inputPassword);
+    $isValid = $user && $storedHash !== '' && password_verify($inputPassword, $storedHash);
 
     if (!$isValid) {
         json_out(['error' => 'Invalid credentials'], 401);
     }
-    // Create session
 
     $token = bin2hex(random_bytes(32));
     $ins = db()->prepare('INSERT INTO admin_sessions (token, user_id, expires_at) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 8 HOUR))');
@@ -187,7 +204,6 @@ if ($resource === 'posts') {
         auth_required();
         $b = json_decode(file_get_contents('php://input'), true);
         $slug = slugify($b['slug'] ?? $b['title'] ?? '');
-        // ensure unique slug
         $check = db()->prepare('SELECT COUNT(*) FROM posts WHERE slug = ?');
         $check->execute([$slug]);
         if ((int)$check->fetchColumn() > 0) $slug .= '-' . time();
