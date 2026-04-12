@@ -367,7 +367,7 @@
       display: block; margin-bottom: 10px;
     }
     .notes-area {
-      width: 100%; min-height: 130px;
+      width: 100%; min-height: 140px;
       font-size: 12px; font-family: inherit; color: var(--muted);
       border: 1px solid var(--border); border-radius: var(--radius);
       padding: 12px 14px; resize: vertical; background: var(--bg); line-height: 1.7;
@@ -482,6 +482,12 @@
       table.items { min-width: 460px; }
     }
     
+    @media print {
+  .accent-stripe {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
   </style>
 </head>
 <body class="page-invoice-gen">
@@ -696,9 +702,14 @@
         <!-- Notes -->
         <div class="notes-wrap">
           <span class="notes-lbl">Notes / Terms & Conditions</span>
-          <textarea class="notes-area" placeholder="Enter notes, payment terms, or bank details…">1. This quotation covers the cost of redesigning the website.
+          <textarea class="notes-area" 
+  placeholder="Enter notes, payment terms, or bank details…"
+  oninput="autoExpand(this)"
+  style="resize:none; overflow:hidden;">1. This quotation covers the cost of redesigning the website.
 2. Additional customisation or features will be quoted separately.
-3. This is a computer-generated document; no signature is required.</textarea>
+3. Kindly transfer the amount to the following bank account: 
+Malayan Banking Berhad - 558172654995 (YM GROUP)
+4. This is a computer-generated document;</textarea>
         </div>
 
       </div><!-- end doc-inner -->
@@ -745,26 +756,57 @@
     { hex: '#2C2C2A', name: 'Dark' },
   ];
 
-  let accent = COLORS[0].hex;
+  let accent = COLORS[7].hex;
   let currency = 'MYR';
   let rowId = 0;
   let items = [];
 
+  function autoExpand(el) {
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
   function init() {
-    const row = document.getElementById('colorRow');
-    COLORS.forEach((c, i) => {
-      const d = document.createElement('div');
-      d.className = 'color-dot' + (i === 0 ? ' selected' : '');
-      d.style.background = c.hex;
-      d.title = c.name;
-      d.onclick = () => pickColor(d, c.hex);
-      row.appendChild(d);
-    });
-    applyAccent(accent);
-    addRow('Website Redesign', 1, 3500);
-    addRow('UI/UX Design', 3, 800);
-    addRow('Project Management', 5, 200);
-  }
+  const row = document.getElementById('colorRow');
+  COLORS.forEach((c, i) => {
+    const d = document.createElement('div');
+    d.className = 'color-dot' + (i === 7 ? ' selected' : '');
+    d.style.background = c.hex;
+    d.title = c.name;
+    d.onclick = () => pickColor(d, c.hex);
+    row.appendChild(d);
+  });
+  applyAccent(accent);
+
+  // ── Default company logo via fetch → base64 ──
+  fetch('assets/backgroud_picture/logo-ym.png')
+    .then(r => r.blob())
+    .then(blob => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const src = e.target.result;
+        const docImg = document.getElementById('docLogoImg');
+        docImg.src = src;
+        docImg.style.display = 'block';
+        docImg.style.maxWidth = document.getElementById('logoSize').value + 'px';
+        document.getElementById('logoThumb').src = src;
+        document.getElementById('logoPlaceholderDoc').style.display = 'none';
+        document.getElementById('uploadZone').style.display = 'none';
+        document.getElementById('logoPreview').style.display = 'flex';
+        document.getElementById('logoSizeRow').style.display = 'flex';
+        document.getElementById('showCoRow').style.display = 'flex';
+      };
+      reader.readAsDataURL(blob);
+    })
+    .catch(() => console.warn('Default logo not found — skipping.'));
+  // ── end default logo ──
+
+  addRow('Website Redesign', 1, 3500);
+  addRow('UI/UX Design', 3, 800);
+  addRow('Project Management', 5, 200);
+
+  const notes = document.querySelector('.notes-area');
+  if (notes) autoExpand(notes);
+}
 
   function pickColor(el, hex) {
     document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
@@ -777,8 +819,8 @@
     document.getElementById('accentStripe').style.background = hex;
     document.getElementById('docTitle').style.color = hex;
     document.getElementById('tableHead').style.borderBottomColor = hex;
-    document.getElementById('totalRow').style.background = hex;
-    // Update CSS variable for total row
+    const totalRow = document.querySelector('.total-row');
+    if (totalRow) totalRow.style.background = hex;
     document.documentElement.style.setProperty('--accent', hex);
   }
 
@@ -957,6 +999,7 @@
       if (!mq.matches) closeNav();
     });
   })();
+
 </script>
 </body>
 </html>

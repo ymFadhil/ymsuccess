@@ -24,7 +24,6 @@
           <li><a href="index.php#services">UI/UX Design</a></li>
           <li><a href="index.php#services">SEO</a></li>
           <li><a href="index.php#services">Maintenance</a></li>
-          <li><a href="invoice-generate">Invoice Generator</a></li>
         </ul>
       </div>
       <div class="ft-col">
@@ -37,8 +36,7 @@
       </div>
     </div>
     <div class="ft-bottom">
-      <span>Copyright © 2026 YMSUCCESS. All Rights Reserved.</span>
-      <!-- <div class="social-row">
+    <span id="secretAccess">Copyright © 2026 YMSUCCESS. All Rights Reserved.</span>      <!-- <div class="social-row">
         <a href="#">Instagram</a>
         <a href="#">LinkedIn</a>
         <a href="#">Facebook</a>
@@ -46,3 +44,22 @@
       </div> -->
     </div>
   </footer>
+  <script>
+let clickCount = 0;
+let timer;
+
+const secret = document.getElementById('secretAccess');
+
+secret.addEventListener('click', () => {
+  clickCount++;
+
+  clearTimeout(timer);
+  timer = setTimeout(() => {
+    clickCount = 0;
+  }, 1500); // reset kalau lambat
+
+  if (clickCount === 3) {
+    window.location.href = '/ymsuccess/invoice-generate';
+  }
+});
+</script>
