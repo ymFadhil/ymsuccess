@@ -228,7 +228,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const API='api.php'; // change to your full URL if needed
+const API='api'; // change to your full URL if needed
 const apiUrl=(r,params={})=>{
   const q=new URLSearchParams({r,...params});
   return `${API}?${q.toString()}`;

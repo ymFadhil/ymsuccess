@@ -59,7 +59,7 @@ secret.addEventListener('click', () => {
   }, 1500); // reset kalau lambat
 
   if (clickCount === 3) {
-    window.location.href = '/ymsuccess/invoice-generate';
+    window.location.href = '/invoice-generate';
   }
 });
 </script>

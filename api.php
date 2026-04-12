@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-//  YM SUCCESS Blog API  —  api.php
+//  YM SUCCESS Blog API  —  api
 //  Place this file on your server alongside blog & admin
 // ============================================================
 
@@ -112,7 +112,7 @@ $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $path   = trim(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH), '/');
 $parts  = explode('/', $path);
 
-$idx = array_search('api.php', $parts, true);
+$idx = array_search('api', $parts, true);
 if ($idx !== false) {
     $parts = array_slice($parts, $idx + 1);
 }
@@ -136,12 +136,7 @@ if ($resource === 'login' && $method === 'POST') {
     $st->execute([$username]);
     $user = $st->fetch();
 
-    $storedHash = (string)($user['password_hash'] ?? '');
-
-    // ✅ FIX: Use password_verify() to properly check bcrypt hashes.
-    // If your DB stores a plain-text password, replace this with:
-    //   $isValid = $user && $storedHash !== '' && hash_equals($storedHash, $inputPassword);
-    $isValid = $user && $storedHash !== '' && password_verify($inputPassword, $storedHash);
+    $isValid = $user && password_verify($inputPassword, $user['password_hash']);
 
     if (!$isValid) {
         json_out(['error' => 'Invalid credentials'], 401);
