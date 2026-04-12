@@ -18,6 +18,9 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(200); exit; }
 
+// ── FIX: define $isLocalHost sebelum guna ──────────────────
+$isLocalHost = in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1']);
+
 set_exception_handler(function (Throwable $e): void {
     if (!headers_sent()) {
         header('Content-Type: application/json; charset=UTF-8');
@@ -168,7 +171,7 @@ if ($resource === 'posts') {
         json_out(['posts' => $st->fetchAll(), 'total' => $count, 'page' => $page, 'pages' => ceil($count / $limit)]);
     }
 
-    // GET /posts/{slug}  — single post (public)
+    // GET /posts/{slug}  — single post (public, published only)
     if ($method === 'GET' && $id) {
         $st = db()->prepare("SELECT * FROM posts WHERE slug = ? AND status = 'published'");
         $st->execute([$id]);
@@ -233,6 +236,17 @@ if ($resource === 'admin-posts' && $method === 'GET') {
 if ($resource === 'categories' && $method === 'GET') {
     $st = db()->query("SELECT DISTINCT category FROM posts WHERE status='published' AND category != '' ORDER BY category");
     json_out(['categories' => array_column($st->fetchAll(), 'category')]);
+}
+
+// ── 5e. ADMIN: single post by ID (support draft + published) ──
+if ($resource === 'admin-post' && $method === 'GET') {
+    auth_required();
+    if (!$id) json_out(['error' => 'Missing id'], 400);
+    $st = db()->prepare('SELECT * FROM posts WHERE id = ?');
+    $st->execute([$id]);
+    $post = $st->fetch();
+    if (!$post) json_out(['error' => 'Not found'], 404);
+    json_out($post);
 }
 
 json_out(['error' => 'Not found'], 404);

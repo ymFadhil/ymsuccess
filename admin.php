@@ -7,17 +7,16 @@
   <meta name="robots" content="noindex, nofollow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <!-- Rich text editor -->
   <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
   <link rel="icon" href="assets/favicon_io/favicon.ico">
 
- <style>
+  <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--navy:#0a1628;--navy2:#132040;--gold:#c9a84c;--gold2:#e8c76a;--cream:#f7f4ee;--text:#1a1a2e;--muted:#6b7280;--border:#e2ddd4;--white:#fff;--green:#16a34a;--red:#dc2626}
     body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
 
-    /* ── LOGIN ── */
+    /* LOGIN */
     #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem}
     .login-box{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:2.5rem;width:100%;max-width:380px}
     .login-box h1{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--navy);margin-bottom:.25rem}
@@ -30,7 +29,7 @@
     .btn-primary:hover{background:var(--navy2)}
     .login-err{color:var(--red);font-size:.83rem;margin-top:.75rem;text-align:center;display:none}
 
-    /* ── SHELL ── */
+    /* SHELL */
     #app{display:none;min-height:100vh}
     .sidebar{position:fixed;top:0;left:0;width:220px;height:100vh;background:var(--navy);display:flex;flex-direction:column;z-index:50;border-right:1px solid rgba(201,168,76,.1)}
     .sidebar-logo{padding:1.5rem 1.25rem;font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);border-bottom:1px solid rgba(255,255,255,.07)}
@@ -55,13 +54,13 @@
     .btn-danger:hover{background:#fef2f2}
     .content{padding:2rem;flex:1}
 
-    /* ── STATS ── */
+    /* STATS */
     .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
     .stat-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem}
     .stat-card .val{font-size:2rem;font-weight:500;color:var(--navy);font-family:'Playfair Display',serif}
     .stat-card .lbl{font-size:.78rem;color:var(--muted);margin-top:.25rem}
 
-    /* ── TABLE ── */
+    /* TABLE */
     .table-wrap{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden}
     table{width:100%;border-collapse:collapse;font-size:.875rem}
     thead{background:var(--cream)}
@@ -78,7 +77,7 @@
     .tbl-btn.del{color:var(--red);border-color:#fca5a5}
     .tbl-btn.del:hover{background:#fef2f2}
 
-    /* ── EDITOR ── */
+    /* EDITOR */
     #editor-view{display:none}
     .editor-form{max-width:900px}
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
@@ -93,7 +92,6 @@
     #quill-editor{min-height:340px;font-family:'DM Sans',sans-serif;font-size:.95rem}
     .ql-toolbar{border-radius:8px 8px 0 0;border-color:var(--border)!important}
     .ql-container{border-radius:0 0 8px 8px;border-color:var(--border)!important;font-family:'DM Sans',sans-serif}
-    .editor-actions{display:flex;gap:.75rem;margin-top:1.5rem}
     .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:var(--gold);padding:.75rem 1.25rem;border-radius:10px;font-size:.88rem;font-weight:500;opacity:0;pointer-events:none;transition:opacity .3s;z-index:999}
     .toast.show{opacity:1}
     .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:3rem auto}
@@ -103,7 +101,7 @@
 </head>
 <body>
 
-<!-- ══ LOGIN ══ -->
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <h1>YM SUCCESS</h1>
@@ -115,7 +113,7 @@
   </div>
 </div>
 
-<!-- ══ APP SHELL ══ -->
+<!-- APP SHELL -->
 <div id="app">
   <aside class="sidebar">
     <div class="sidebar-logo">YM <span>SUCCESS</span><small>Blog Admin</small></div>
@@ -228,78 +226,107 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const API='api'; // change to your full URL if needed
-const apiUrl=(r,params={})=>{
-  const q=new URLSearchParams({r,...params});
+const API = 'api';
+const apiUrl = (r, params = {}) => {
+  const q = new URLSearchParams({ r, ...params });
   return `${API}?${q.toString()}`;
 };
-let token=localStorage.getItem('ym_admin_token')||'';
+let token = localStorage.getItem('ym_admin_token') || '';
 let quill;
 
-// ── INIT ─────────────────────────────────────────────────────
-window.onload=()=>{
-  if(token) showApp();
-  quill=new Quill('#quill-editor',{theme:'snow',modules:{toolbar:[[{header:[1,2,3,false]}],['bold','italic','underline','strike'],['blockquote','code-block'],[{list:'ordered'},{list:'bullet'}],['link','image'],['clean']]}});
+// INIT
+window.onload = () => {
+  if (token) showApp();
+  quill = new Quill('#quill-editor', {
+    theme: 'snow',
+    modules: {
+      toolbar: [
+        [{ header: [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        ['blockquote', 'code-block'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['link', 'image'],
+        ['clean']
+      ]
+    }
+  });
 };
 
-// ── AUTH ──────────────────────────────────────────────────────
-async function doLogin(){
-  const un=document.getElementById('un').value;
-  const pw=document.getElementById('pw').value;
-  if(!un||!pw) return;
-  try{
-    const r=await fetch(apiUrl('login'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:un,password:pw})});
-    const d=await r.json();
-    if(d.token){token=d.token;localStorage.setItem('ym_admin_token',token);showApp();}
-    else{document.getElementById('login-err').style.display='block';}
-  }catch{document.getElementById('login-err').style.display='block';}
+// AUTH
+async function doLogin() {
+  const un = document.getElementById('un').value;
+  const pw = document.getElementById('pw').value;
+  if (!un || !pw) return;
+  try {
+    const r = await fetch(apiUrl('login'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: un, password: pw })
+    });
+    const d = await r.json();
+    if (d.token) {
+      token = d.token;
+      localStorage.setItem('ym_admin_token', token);
+      showApp();
+    } else {
+      document.getElementById('login-err').style.display = 'block';
+    }
+  } catch {
+    document.getElementById('login-err').style.display = 'block';
+  }
 }
 
-async function doLogout(){
-  await fetch(apiUrl('logout'),{method:'POST',headers:{Authorization:`Bearer ${token}`}});
-  token='';localStorage.removeItem('ym_admin_token');
-  document.getElementById('app').style.display='none';
-  document.getElementById('login-screen').style.display='flex';
+async function doLogout() {
+  await fetch(apiUrl('logout'), { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
+  token = '';
+  localStorage.removeItem('ym_admin_token');
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
 }
 
-function showApp(){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('app').style.display='block';
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
   loadAdminPosts();
 }
 
-function ah(){return{Authorization:`Bearer ${token}`,'Content-Type':'application/json'};}
-
-// ── VIEWS ─────────────────────────────────────────────────────
-function showView(v){
-  document.getElementById('posts-view').style.display=v==='posts'?'block':'none';
-  document.getElementById('editor-view').style.display=v==='editor'?'block':'none';
-  document.getElementById('nav-posts').classList.toggle('active',v==='posts');
-  document.getElementById('nav-new').classList.toggle('active',v==='editor');
-  if(v==='posts') loadAdminPosts();
+function ah() {
+  return { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
 }
 
-// ── LOAD ALL POSTS (admin) ────────────────────────────────────
-async function loadAdminPosts(){
-  document.getElementById('posts-table').innerHTML='<tr><td colspan="5"><div class="spinner"></div></td></tr>';
-  try{
-    const r=await fetch(apiUrl('admin-posts'),{headers:ah()});
-    if(r.status===401){doLogout();return;}
-    const d=await r.json();
-    const posts=d.posts||[];
-    const pub=posts.filter(p=>p.status==='published').length;
-    const draft=posts.length-pub;
-    document.getElementById('stats-row').innerHTML=`
+// VIEWS
+function showView(v) {
+  document.getElementById('posts-view').style.display = v === 'posts' ? 'block' : 'none';
+  document.getElementById('editor-view').style.display = v === 'editor' ? 'block' : 'none';
+  document.getElementById('nav-posts').classList.toggle('active', v === 'posts');
+  document.getElementById('nav-new').classList.toggle('active', v === 'editor');
+  if (v === 'posts') loadAdminPosts();
+}
+
+// LOAD ALL POSTS
+async function loadAdminPosts() {
+  document.getElementById('posts-table').innerHTML = '<tr><td colspan="5"><div class="spinner"></div></td></tr>';
+  try {
+    const r = await fetch(apiUrl('admin-posts'), { headers: ah() });
+    if (r.status === 401) { doLogout(); return; }
+    const d = await r.json();
+    const posts = d.posts || [];
+    const pub = posts.filter(p => p.status === 'published').length;
+    const draft = posts.length - pub;
+    document.getElementById('stats-row').innerHTML = `
       <div class="stat-card"><div class="val">${posts.length}</div><div class="lbl">Total Posts</div></div>
       <div class="stat-card"><div class="val">${pub}</div><div class="lbl">Published</div></div>
       <div class="stat-card"><div class="val">${draft}</div><div class="lbl">Drafts</div></div>`;
-    if(!posts.length){document.getElementById('posts-table').innerHTML='<tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--muted)">No posts yet. Create your first post!</td></tr>';return;}
-    document.getElementById('posts-table').innerHTML=posts.map(p=>{
-      const dt=new Date(p.created_at).toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric'});
-      return`<tr>
+    if (!posts.length) {
+      document.getElementById('posts-table').innerHTML = '<tr><td colspan="5" style="text-align:center;padding:3rem;color:var(--muted)">No posts yet. Create your first post!</td></tr>';
+      return;
+    }
+    document.getElementById('posts-table').innerHTML = posts.map(p => {
+      const dt = new Date(p.created_at).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' });
+      return `<tr>
         <td><strong style="color:var(--navy)">${e(p.title)}</strong><br><small style="color:var(--muted)">/blog?post=${e(p.slug)}</small></td>
-        <td>${e(p.category||'—')}</td>
-        <td><span class="badge badge-${p.status==='published'?'pub':'draft'}">${p.status}</span></td>
+        <td>${e(p.category || '—')}</td>
+        <td><span class="badge badge-${p.status === 'published' ? 'pub' : 'draft'}">${p.status}</span></td>
         <td style="color:var(--muted);font-size:.82rem">${dt}</td>
         <td><div class="tbl-actions">
           <button class="tbl-btn" onclick="editPost(${p.id})">Edit</button>
@@ -307,133 +334,164 @@ async function loadAdminPosts(){
         </div></td>
       </tr>`;
     }).join('');
-  }catch{document.getElementById('posts-table').innerHTML='<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--red)">Error loading posts.</td></tr>';}
+  } catch {
+    document.getElementById('posts-table').innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--red)">Error loading posts.</td></tr>';
+  }
 }
 
-// ── EDITOR ────────────────────────────────────────────────────
-function openEditor(post=null){
-  document.getElementById('edit-id').value='';
-  document.getElementById('f-title').value='';
-  document.getElementById('f-slug').value='';
-  document.getElementById('f-category').value='';
-  document.getElementById('f-excerpt').value='';
-  document.getElementById('f-image').value='';
-  document.getElementById('f-tags').value='';
-  document.getElementById('f-meta-title').value='';
-  document.getElementById('f-meta-desc').value='';
-  document.getElementById('img-preview').style.display='none';
-  document.getElementById('slug-preview').textContent='';
-  document.getElementById('editor-title').textContent='New Post';
+// EDITOR
+function openEditor() {
+  document.getElementById('edit-id').value = '';
+  document.getElementById('f-title').value = '';
+  document.getElementById('f-slug').value = '';
+  document.getElementById('f-category').value = '';
+  document.getElementById('f-excerpt').value = '';
+  document.getElementById('f-image').value = '';
+  document.getElementById('f-tags').value = '';
+  document.getElementById('f-meta-title').value = '';
+  document.getElementById('f-meta-desc').value = '';
+  document.getElementById('img-preview').style.display = 'none';
+  document.getElementById('slug-preview').textContent = '';
+  document.getElementById('editor-title').textContent = 'New Post';
   quill.setContents([]);
   showView('editor');
 }
 
-async function editPost(id){
+// FIX: editPost — guna endpoint admin-post?id={id} terus, support draft & published
+async function editPost(id) {
   openEditor();
-  document.getElementById('editor-title').textContent='Edit Post';
-  try{
-    // get all posts and find this one
-    const r=await fetch(apiUrl('admin-posts'),{headers:ah()});
-    const d=await r.json();
-    const posts=d.posts||[];
-    const meta=posts.find(p=>p.id===id);
-    if(!meta) return;
-    // fetch full post by slug
-    const r2=await fetch(apiUrl('posts',{id:meta.slug}),{headers:ah()});
-    const post=await r2.json();
-    document.getElementById('edit-id').value=post.id;
-    document.getElementById('f-title').value=post.title||'';
-    document.getElementById('f-slug').value=post.slug||'';
-    document.getElementById('slug-preview').textContent=post.slug||'';
-    document.getElementById('f-category').value=post.category||'';
-    document.getElementById('f-excerpt').value=post.excerpt||'';
-    document.getElementById('f-image').value=post.cover_image||'';
-    document.getElementById('f-tags').value=post.tags||'';
-    document.getElementById('f-meta-title').value=post.meta_title||'';
-    document.getElementById('f-meta-desc').value=post.meta_description||'';
-    if(post.cover_image){const img=document.getElementById('img-preview');img.src=post.cover_image;img.style.display='block';}
-    quill.clipboard.dangerouslyPasteHTML(post.content||'');
-    showView('editor');
-  }catch{toast('Error loading post','red');}
+  document.getElementById('editor-title').textContent = 'Edit Post';
+
+  try {
+    const r = await fetch(apiUrl('admin-post', { id: id }), { headers: ah() });
+
+    if (r.status === 401) { doLogout(); return; }
+    if (!r.ok) {
+      toast('Error loading post — ' + r.status, 'red');
+      return;
+    }
+
+    const post = await r.json();
+
+    if (post.error) {
+      toast('Post not found', 'red');
+      return;
+    }
+
+    document.getElementById('edit-id').value = post.id;
+    document.getElementById('f-title').value = post.title || '';
+    document.getElementById('f-slug').value = post.slug || '';
+    document.getElementById('slug-preview').textContent = post.slug || '';
+    document.getElementById('f-category').value = post.category || '';
+    document.getElementById('f-excerpt').value = post.excerpt || '';
+    document.getElementById('f-image').value = post.cover_image || '';
+    document.getElementById('f-tags').value = post.tags || '';
+    document.getElementById('f-meta-title').value = post.meta_title || '';
+    document.getElementById('f-meta-desc').value = post.meta_description || '';
+    document.getElementById('meta-count').textContent = `${(post.meta_description || '').length} / 160 chars`;
+
+    if (post.cover_image) {
+      const img = document.getElementById('img-preview');
+      img.src = post.cover_image;
+      img.style.display = 'block';
+    }
+
+    quill.clipboard.dangerouslyPasteHTML(post.content || '');
+
+  } catch (err) {
+    console.error('editPost error:', err);
+    toast('Connection error', 'red');
+  }
 }
 
-async function savePost(status){
-  const title=document.getElementById('f-title').value.trim();
-  const content=quill.root.innerHTML;
-  if(!title){toast('Please enter a title','red');return;}
-  if(quill.getText().trim().length<10){toast('Content is too short','red');return;}
+async function savePost(status) {
+  const title = document.getElementById('f-title').value.trim();
+  const content = quill.root.innerHTML;
+  if (!title) { toast('Please enter a title', 'red'); return; }
+  if (quill.getText().trim().length < 10) { toast('Content is too short', 'red'); return; }
 
-  const id=document.getElementById('edit-id').value;
-  const body={
+  const id = document.getElementById('edit-id').value;
+  const body = {
     title,
-    slug:document.getElementById('f-slug').value.trim()||slugify(title),
-    excerpt:document.getElementById('f-excerpt').value.trim(),
+    slug: document.getElementById('f-slug').value.trim() || slugify(title),
+    excerpt: document.getElementById('f-excerpt').value.trim(),
     content,
-    cover_image:document.getElementById('f-image').value.trim(),
-    category:document.getElementById('f-category').value.trim(),
-    tags:document.getElementById('f-tags').value.trim(),
-    meta_title:document.getElementById('f-meta-title').value.trim(),
-    meta_description:document.getElementById('f-meta-desc').value.trim(),
+    cover_image: document.getElementById('f-image').value.trim(),
+    category: document.getElementById('f-category').value.trim(),
+    tags: document.getElementById('f-tags').value.trim(),
+    meta_title: document.getElementById('f-meta-title').value.trim(),
+    meta_description: document.getElementById('f-meta-desc').value.trim(),
     status
   };
 
-  try{
+  try {
     let r;
-    if(id){
-      r=await fetch(apiUrl('posts',{id}),{method:'PUT',headers:ah(),body:JSON.stringify(body)});
-    }else{
-      r=await fetch(apiUrl('posts'),{method:'POST',headers:ah(),body:JSON.stringify(body)});
+    if (id) {
+      r = await fetch(apiUrl('posts', { id }), { method: 'PUT', headers: ah(), body: JSON.stringify(body) });
+    } else {
+      r = await fetch(apiUrl('posts'), { method: 'POST', headers: ah(), body: JSON.stringify(body) });
     }
-    if(r.ok){
-      toast(status==='published'?'Post published!':'Draft saved');
-      setTimeout(()=>showView('posts'),900);
-    }else{toast('Error saving post','red');}
-  }catch{toast('Connection error','red');}
-}
-
-async function deletePost(id,title){
-  if(!confirm(`Delete "${title}"? This cannot be undone.`)) return;
-  try{
-    const r=await fetch(apiUrl('posts',{id}),{method:'DELETE',headers:ah()});
-    if(r.ok){toast('Post deleted');loadAdminPosts();}
-    else toast('Error deleting post','red');
-  }catch{toast('Connection error','red');}
-}
-
-// ── HELPERS ────────────────────────────────────────────────────
-function autoSlug(){
-  const t=document.getElementById('f-title').value;
-  const s=slugify(t);
-  document.getElementById('f-slug').value=s;
-  document.getElementById('slug-preview').textContent=s;
-}
-
-function slugify(t){return t.toLowerCase().trim().replace(/[^a-z0-9\s-]/g,'').replace(/[\s-]+/g,'-').replace(/^-+|-+$/g,'');}
-
-function previewImg(){
-  const url=document.getElementById('f-image').value.trim();
-  const img=document.getElementById('img-preview');
-  if(url){img.src=url;img.style.display='block';}else img.style.display='none';
-}
-
-document.addEventListener('input',ev=>{
-  if(ev.target.id==='f-meta-desc'){
-    document.getElementById('meta-count').textContent=`${ev.target.value.length} / 160 chars`;
+    if (r.ok) {
+      toast(status === 'published' ? 'Post published!' : 'Draft saved');
+      setTimeout(() => showView('posts'), 900);
+    } else {
+      toast('Error saving post', 'red');
+    }
+  } catch {
+    toast('Connection error', 'red');
   }
-  if(ev.target.id==='f-slug'){
-    document.getElementById('slug-preview').textContent=ev.target.value;
+}
+
+async function deletePost(id, title) {
+  if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+  try {
+    const r = await fetch(apiUrl('posts', { id }), { method: 'DELETE', headers: ah() });
+    if (r.ok) { toast('Post deleted'); loadAdminPosts(); }
+    else toast('Error deleting post', 'red');
+  } catch {
+    toast('Connection error', 'red');
+  }
+}
+
+// HELPERS
+function autoSlug() {
+  const t = document.getElementById('f-title').value;
+  const s = slugify(t);
+  document.getElementById('f-slug').value = s;
+  document.getElementById('slug-preview').textContent = s;
+}
+
+function slugify(t) {
+  return t.toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/[\s-]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+function previewImg() {
+  const url = document.getElementById('f-image').value.trim();
+  const img = document.getElementById('img-preview');
+  if (url) { img.src = url; img.style.display = 'block'; }
+  else img.style.display = 'none';
+}
+
+document.addEventListener('input', ev => {
+  if (ev.target.id === 'f-meta-desc') {
+    document.getElementById('meta-count').textContent = `${ev.target.value.length} / 160 chars`;
+  }
+  if (ev.target.id === 'f-slug') {
+    document.getElementById('slug-preview').textContent = ev.target.value;
   }
 });
 
-function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function e(s) {
+  return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
 
-function toast(msg,type=''){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.style.background=type==='red'?'var(--red)':'var(--navy)';
-  t.style.color=type==='red'?'#fff':'var(--gold)';
+function toast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = type === 'red' ? 'var(--red)' : 'var(--navy)';
+  t.style.color = type === 'red' ? '#fff' : 'var(--gold)';
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2800);
+  setTimeout(() => t.classList.remove('show'), 2800);
 }
 </script>
 </body>

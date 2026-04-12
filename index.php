@@ -3,12 +3,43 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>YMSUCCESS — Web | System Development</title>
-  <link rel="icon" href="assets/favicon_io/favicon.ico">
+  <title>Web Design Malaysia | YMSUCCESS — Website dari RM999</title>
+  <meta name="description" content="Syarikat web design Malaysia. Bina website profesional dari RM999. Mobile-friendly, SEO optimised, hantar dalam 14 hari.">
+  <meta name="keywords" content="web design malaysia, buat website malaysia, web designer malaysia">
+  <meta property="og:title" content="Web Design Malaysia | YMSUCCESS">
+  <meta property="og:description" content="Website profesional dari RM999. Fast, mobile-friendly, SEO optimised.">
+  <meta property="og:image" content="https://ymsuccess.com/assets/backgroud_picture/logo-ym.png">
+  <meta property="og:url" content="https://ymsuccess.com">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://ymsuccess.com/">  <link rel="icon" href="assets/favicon_io/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="styles.css"/>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "YMSUCCESS",
+      "description": "Web design dan system development di Malaysia",
+      "url": "https://ymsuccess.com",
+      "telephone": "+60174776935",
+      "address": {
+        "@type": "PostalAddress",
+        "addressRegion": "Selangor",
+        "addressCountry": "MY"
+      },
+      "priceRange": "RM999 - RM5999",
+      "serviceArea": "Malaysia",
+      "offers": [
+        { "@type": "Offer", "name": "Starter Package", "price": "999", "priceCurrency": "MYR" },
+        { "@type": "Offer", "name": "Growth Package", "price": "2999", "priceCurrency": "MYR" },
+        { "@type": "Offer", "name": "Elite Package", "price": "5999", "priceCurrency": "MYR" }
+      ]
+    }
+    </script>
 </head>
 <body>
 
@@ -18,7 +49,7 @@
   <!-- NAV -->
   <nav>
     <a href="#" class="logo logo--img" aria-label="YMSUCCESS — home">
-      <img src="assets/backgroud_picture/logo-ym.png" alt="" width="160" height="64" decoding="async" fetchpriority="high"/>
+      <img src="assets/backgroud_picture/logo-ym.png" alt="YMSUCCESS Logo — Web Building Malaysia" width="160" height="64" decoding="async" fetchpriority="high"/>
       <div class="logo-txt">YM<span>SUCCESS</span></div>
     </a>
     <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Open menu">
@@ -442,5 +473,16 @@
   <!-- FOOTER -->
   <?php include __DIR__ . '/footer.php'; ?>
   <script src="script.js" defer></script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "YMSUCCESS",
+  "description": "Web design dan development di Malaysia",
+  "address": { "@type": "PostalAddress", "addressCountry": "MY" },
+  "telephone": "+60174776935",
+  "url": "https://ymsuccess.com"
+  }
+  </script>
 </body>
 </html>
