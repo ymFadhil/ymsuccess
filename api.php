@@ -5,27 +5,10 @@
 // ============================================================
 
 // ── 1. DATABASE CONFIG ──────────────────────────────────────
-$host = strtolower((string)($_SERVER['HTTP_HOST'] ?? ''));
-$isLocalHost = ($host === '' || strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false);
-$env = $isLocalHost ? 'local' : 'production';
-if (isset($_GET['env']) && $_GET['env'] === 'local') {
-    $env = 'local';
-}
-if (isset($_GET['env']) && $_GET['env'] === 'production') {
-    $env = 'production';
-}
-
-if ($env === 'local') {
-    define('DB_HOST', 'localhost');
-    define('DB_NAME', 'ymsukfxv_blog');
-    define('DB_USER', 'demosystem');
-    define('DB_PASS', '6WDYmS0t0EahmRBL');
-} else {
-    define('DB_HOST', 'localhost');
-    define('DB_NAME', 'ymsukfxv_blog');
-    define('DB_USER', 'cpses_ympj7cyy4x');
-    define('DB_PASS', '8Iu[T5sLU&Z~');
-}
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'ymsukfxv_blog');
+define('DB_USER', 'ymsukfxv_fadhil');
+define('DB_PASS', 'vGJHQRlpRFMS');
 
 // ── 2. CORS & HEADERS ───────────────────────────────────────
 header('Content-Type: application/json; charset=UTF-8');
