@@ -829,6 +829,7 @@ $base_url = (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhos
     <li><a href="<?= $base_url ?>#services">Services</a></li>
     <li><a href="<?= $base_url ?>blog">Blog</a></li>
     <li><a href="<?= $base_url ?>#why">Why Us</a></li>
+    <li role="none"><a href="#live-projects" role="menuitem">Portfolio</a></li>
     <li><a href="<?= $base_url ?>#cta" class="nav-cta">Get Started</a></li>
       <button id="darkToggle" class="blog-filter-btn">Dark Mode</button>
     </ul>
